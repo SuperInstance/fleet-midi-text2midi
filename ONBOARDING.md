@@ -1,4 +1,4 @@
-# ## 🎹  fleet-fleet-midi-text2midi — Onboarding Guide
+# 🎵 MIDI Fleet Repo — Onboarding Guide
 
 ## For Humans
 
