@@ -1,0 +1,24 @@
+{
+  "name": "@superinstance/midi-text2midi",
+  "version": "0.1.0",
+  "description": "Text-to-MIDI fleet agent — natural language prompts to MIDI, REMI tokenization, I2I bottle transport",
+  "main": "lib/engine.js",
+  "scripts": {
+    "test": "bash tests/zeroshot.sh",
+    "generate": "node lib/engine.js",
+    "start": "node lib/server.js"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0",
+    "express": "^4.18.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SuperInstance/fleet-midi-text2midi.git"
+  },
+  "keywords": ["midi", "text-to-midi", "fleet", "music-ai", "tokenization"]
+}
