@@ -32,22 +32,60 @@ git clone https://github.com/SuperInstance/fleet-midi-text2midi.git
 ## 🚀 Quick Start
 
 ```bash
-# see Getting Started below
+# Generate MIDI from text:
+node lib/engine.js "jazz piano vamp in Cmaj7 with walking bass"
+
+# Start the API server:
+node lib/server.js &
+curl -X POST localhost:3001/generate \
+  -H "Content-Type: application/json" \
+  -d "{\"prompt\":\"minor blues in A, 4 bars, 120bpm\"}"
+
+# Run the zeroshot tests:
+bash tests/zeroshot.sh
 ```
 
 ## 🏗️ Architecture
 
 ```
-Coming soon
+┌──────────────────────────────────────────────────────────┐
+│                                                          │
+│   "jazz piano in Cmaj7"                                 │
+│         │                                                │
+│         ▼                                                │
+│   ┌──────────┐    ┌──────────┐    ┌──────────┐           │
+│   │ music21   │───▶│ REMI    │───▶│ I2I     │           │
+│   │ Generator │    │Tokenizer │    │ Bottle  │           │
+│   └──────────┘    └──────────┘    └──────────┘           │
+│         │              │              │                   │
+│         ▼              ▼              ▼                   │
+│   ┌──────────┐    ┌──────────┐    ┌──────────┐           │
+│   │ MIDI File│    │ Tokens   │    │ Fleet   │           │
+│   │ (.mid)  │    │ (JSON)   │    │ Harbor  │           │
+│   └──────────┘    └──────────┘    └──────────┘           │
+│                                                          │
+│   Each → 3 tracks │ 52 notes │ 63 REMI tokens │ I2I bottle│
+└──────────────────────────────────────────────────────────┘
 ```
 
 ## 📡 API
 
-See source code for endpoints.
+### POST /generate
+Generate MIDI from a natural language prompt.
+
+```json
+{"prompt": "jazz piano in Cmaj7 with walking bass"}
+```
+→ Returns MIDI file path, REMI token sequence, and I2I bottle confirmation.
+
+### GET /health
+```json
+{"status": "ok", "service": "rhapsodia"}
+```
 
 ## 🧪 Beta Tested
 
-Part of the [SuperInstance MIDI Fleet](https://github.com/SuperInstance/construct-coordination/blob/main/FLEET_MIDI.md). Zeroshot-verified on every push via CI.
+Part of the [SuperInstance MIDI Fleet](https://github.com/SuperInstance/construct-coordination/blob/main/FLEET_MIDI.md). Every push verified via CI — zeroshot tests ensure zero-config operation out of the box.
 
 ## 🤝 Related
 
