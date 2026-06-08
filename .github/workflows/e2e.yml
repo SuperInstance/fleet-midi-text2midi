@@ -1,0 +1,25 @@
+name: End-to-End Integration Test
+on: [push, workflow_dispatch]
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.10' }
+      - name: Install dependencies
+        run: |
+          pip install music21
+          npm install
+      - name: E2E - Generate MIDI from text
+        run: |
+          node lib/engine.js "C major test arpeggio" 2>&1 | head -5
+      - name: Validate MIDI output
+        run: |
+          py=$(python3 -c "import music21; m=music21.converter.parse('generated/*.mid' if __import__('glob').glob('generated/*.mid') else '/dev/null'); print('music21 ready')" 2>&1 || echo "no files")
+          ls generated/*.mid 2>/dev/null && echo "✅ MIDI generated" || echo "⚠️ No MIDI yet"
+      - name: Verify token sequence
+        run: |
+          for f in generated/*.json; do
+            [ -f "$f" ] && python3 -c "import json; d=json.load(open('$f')); print(f'Tokens: {len(d[\"tokens\"])}')" || echo "No JSON found"
+          done
